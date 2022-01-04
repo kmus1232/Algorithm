@@ -13,4 +13,4 @@ class Solution:
                 break
             ans += cur
         return ans
-            
+         
