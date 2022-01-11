@@ -2,7 +2,7 @@ def solution(s):
     ans = len(s)
     for l in range(1, len(s) // 2 + 1):
         compress_result = compress(s, l)
-        ans = min(ans, compress_result)
+        ans = min(ans, len(compress_result))
     return ans
 
 
