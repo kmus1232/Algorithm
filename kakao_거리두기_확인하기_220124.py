@@ -12,31 +12,27 @@ def isPlacePartitioned(place) -> int:
 
 
 def isPeoplePartitioned(x, y, place) -> bool:
+    from collections import deque
+    q = deque()
+    q.append((x, y))
     visited = [[False for _ in range(5)] for _ in range(5)]
     visited[x][y] = True
-    arr_dx = [1, 0, -1, 0]
-    arr_dy = [0, -1, 0, 1]
+    dx = [1, 0, -1, 0]
+    dy = [0, -1, 0, 1]
 
-    def bfs(dx, dy):
-        if not (0 <= x + dx < 5) or not (0 <= y + dy < 5):
-            return True
-        if visited[x + dx][y + dy] or (abs(dx) + abs(dy)) > 2:
-            return True
-
-        visited[x + dx][y + dy] = True
-        if place[x + dx][y + dy] == "X":
-            return True
-        elif place[x + dx][y + dy] == "P":
-            return False
-        else:
-            for i in range(4):
-                if not bfs(dx + arr_dx[i], dy + arr_dy[i]):
-                    return False
-        return True
-
-    for i in range(4):
-        if not bfs(arr_dx[i], arr_dy[i]):
-            return False
+    while q:
+        cx, cy = q.popleft()
+        for i in range(4):
+            nx, ny = cx + dx[i], cy + dy[i]
+            if not (0 <= nx < 5) or not (0 <= ny < 5) \
+                    or visited[nx][ny] or place[nx][ny] == "X" \
+                    or (abs(nx - x) + abs(ny - y)) > 2:
+                continue
+            elif place[nx][ny] == "P":
+                return False
+            else:
+                q.append((nx, ny))
+                visited[nx][ny] = True
     return True
 
 
