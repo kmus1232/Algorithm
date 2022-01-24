@@ -14,24 +14,22 @@ def isPlacePartitioned(place) -> int:
 def isPeoplePartitioned(x, y, place) -> bool:
     from collections import deque
     q = deque()
-    q.append((x, y))
+    q.append((x, y, 0))
     visited = [[False for _ in range(5)] for _ in range(5)]
     visited[x][y] = True
-    dx = [1, 0, -1, 0]
-    dy = [0, -1, 0, 1]
+    D = ((-1, 0), (1, 0), (0, -1), (0, 1))
 
     while q:
-        cx, cy = q.popleft()
-        for i in range(4):
-            nx, ny = cx + dx[i], cy + dy[i]
-            if not (0 <= nx < 5) or not (0 <= ny < 5) \
-                    or visited[nx][ny] or place[nx][ny] == "X" \
-                    or (abs(nx - x) + abs(ny - y)) > 2:
+        cx, cy, cdst = q.popleft()
+        for dx, dy in D:
+            nx, ny, ndst = cx + dx, cy + dy, cdst + 1
+            if not (0 <= nx < 5) or not (0 <= ny < 5) or ndst > 2 \
+                    or visited[nx][ny] or place[nx][ny] == "X":
                 continue
             elif place[nx][ny] == "P":
                 return False
-            else:
-                q.append((nx, ny))
+            else:  # place[nx][ny] == "O"
+                q.append((nx, ny, ndst))
                 visited[nx][ny] = True
     return True
 
