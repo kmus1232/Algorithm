@@ -2,11 +2,9 @@ from bisect import bisect, insort
 from collections import defaultdict
 
 
-def find_query(words, query) -> int:
-    start = end = ""
-    for c in query:
-        start += c if c != '?' else 'a'
-        end += c if c != '?' else 'z'
+def find_query(words, query):
+    start = query.replace('?', 'a')
+    end = query.replace('?', 'z')
     start_idx = bisect(words, start)
     end_idx = bisect(words, end)
     return end_idx - start_idx
