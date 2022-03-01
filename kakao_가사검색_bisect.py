@@ -1,7 +1,7 @@
 from bisect import bisect, insort
 from collections import defaultdict
 
-
+# test
 def find_query(words, query):
     start = query.replace('?', 'a')
     end = query.replace('?', 'z')
