@@ -2,6 +2,9 @@ from heapq import *
 
 
 def solution(food_times, k):
+    if sum(food_times) <= k:
+        return -1
+
     heap = [(food, i + 1) for i, food in enumerate(food_times)]
     heapify(heap)
     rest = len(food_times)
@@ -15,15 +18,6 @@ def solution(food_times, k):
             while heap and heap[0][0] == s:
                 heappop(heap)
                 rest -= 1
-            if k == 0:
-                if not heap:
-                    return -1
-                else:
-                    return sorted(heap, key=lambda x: x[1])[0][1]
         else:
             k %= rest
             return sorted(heap, key=lambda x: x[1])[k][1]
-
-
-print(solution([4,5,2,8], 10))
-print(solution([1, 5, 5, 5, 5, 6, 7], 31))
