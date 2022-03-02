@@ -12,7 +12,7 @@ def solution(food_times, k):
 
     while True:
         s = heap[0][0]
-        if (s - prev_s) * rest <= k:
+        if (s - prev_s) * rest < k:
             k -= (s - prev_s) * rest
             prev_s = s
             while heap and heap[0][0] == s:
