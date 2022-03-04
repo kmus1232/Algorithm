@@ -12,12 +12,12 @@ def dijkstra(n, start, end, graph, traps):
         cost, now, status = heappop(pq)
         if now == end:
             return cost
-        if visited[now][status]:
-            continue
 
-        visited[now][status] = True
         if now in traps:
             status ^= 1 << traps.index(now)
+        if visited[now][status]:
+            continue
+        visited[now][status] = True
 
         for i in range(1, n + 1):
             if i == now:
