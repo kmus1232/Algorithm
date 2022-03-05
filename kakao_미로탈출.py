@@ -22,8 +22,8 @@ def dijkstra(n, start, end, graph, traps):
         for i in range(1, n + 1):
             if i == now:
                 continue
-            if (now in traps and bool(status & 1 << traps.index(now))) \
-                    ^ (i in traps and bool(status & 1 << traps.index(i))):
+            if (now in traps and (status & 1 << traps.index(now) != 0)) \
+                    ^ (i in traps and (status & 1 << traps.index(i) != 0)):
                 if graph[i][now] < INF:
                     heappush(pq, (cost + graph[i][now], i, status))
             else:
