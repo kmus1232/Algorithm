@@ -4,6 +4,8 @@ N = int(input())
 
 
 def solution(m, n, x, y):
+    if m < n:
+        m, n, x, y = n, m, y, x
     while x <= (m * n) // gcd(m, n):
         if (x - y) % n == 0:
             return x
