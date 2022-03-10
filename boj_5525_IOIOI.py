@@ -26,4 +26,3 @@ for cnt, num in cnt_dict.items():
         ans += (cnt - n + 1) * num
 print(ans)
 
-
