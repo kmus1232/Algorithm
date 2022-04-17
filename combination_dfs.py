@@ -1,16 +1,17 @@
-l = ['a', 'b', 'c', 'd', 'e']
-n = len(l)
-r = 2
-ans = []
+n, m = map(int, input().split())
 
-def dfs(idx, lst):
-    if len(lst) == r:
-        ans.append(lst)
+
+def dfs(last, cnt, arr):
+    if cnt == m:
+        for e in arr:
+            print(e, end=' ')
+        print()
         return
 
-    for i in range(idx, n):
-        dfs(i + 1, lst + [l[i]])
+    for i in range(last, n + 1):
+        arr.append(i)
+        dfs(i + 1, cnt + 1, arr)
+        arr.pop()
 
-dfs(0, [])
-for e in ans:
-    print(e)
+
+dfs(1, 0, [])
