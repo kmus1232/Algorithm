@@ -2,7 +2,6 @@ from typing import List
 
 
 class Solution:
-
     left = right = 0
 
     def moveRight(self, arr) -> bool:
@@ -26,3 +25,11 @@ class Solution:
             self.changeNumber(arr)
 
         return self.left + 1
+
+    def removeDuplicatesV2(self, arr: List[int]):
+        l = 0
+        for r in range(1, len(arr)):
+            if arr[l] != arr[r]:
+                l += 1
+                arr[l] = arr[r]
+        return l + 1
