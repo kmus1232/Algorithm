@@ -3,25 +3,27 @@ import java.util.stream.Collectors;
 
 class leetcode_316 {
 
-
     public static String removeDuplicateLettersStack(String s) {
-        int[] cnt = new int[26];
-        for (char c : s.toCharArray()) cnt[c - 'a']++;
-        Set<Character> seen = new HashSet<>();
-        Stack<Character> stack = new Stack<>();
-
-        for (char c : s.toCharArray()) {
-            cnt[c - 'a']--;
-            if(seen.contains(c)) {
-                continue;
-            }
-            while (!stack.empty() && stack.peek() > c && cnt[stack.peek() - 'a'] > 0) {
-                seen.remove(stack.pop());
-            }
-            seen.add(c);
-            stack.push(c);
+        int[] lastIndex = new int[26];
+        for (int i = 0; i < s.length(); i++) {
+            lastIndex[s.charAt(i) - 'a'] = i;
         }
-        return stack.stream().map(Object::toString).collect(Collectors.joining(""));
+        boolean[] seen = new boolean[26];
+        Stack<Integer> stack = new Stack<>();
+
+        for (int i = 0; i < s.length(); i++) {
+            int curr = s.charAt(i) - 'a';
+            if (seen[curr])
+                continue;
+            while (!stack.empty() && stack.peek() > curr && lastIndex[stack.peek()] > i)
+                seen[stack.pop()] = false;
+            stack.push(curr);
+            seen[curr] = true;
+        }
+
+        StringBuffer sb = new StringBuffer();
+        while (!stack.empty()) sb.append((char) (stack.pop() + 'a'));
+        return sb.reverse().toString();
     }
 
     public String removeDuplicateLettersUsingSet(String s) {
