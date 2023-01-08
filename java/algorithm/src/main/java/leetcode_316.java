@@ -1,7 +1,7 @@
 import java.util.*;
 import java.util.stream.Collectors;
 
-class leetcode_316 {
+public class leetcode_316 {
 
     public static String removeDuplicateLettersStack(String s) {
         int[] lastIndex = new int[26];
