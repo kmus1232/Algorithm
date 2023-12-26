@@ -8,7 +8,7 @@ dir = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 
 
 def solution(board, aloc, bloc):
-    return play(board, 'A', *aloc, *bloc, 0)[1]
+    return play(board, *aloc, *bloc, 0)[1]
 
 
 def is_inbound(board, r, c):
@@ -29,45 +29,23 @@ def judge(board, r, c) -> (bool, List):
         return (WIN, next_movable)
 
 
-def play(board, player, ar, ac, br, bc, cnt):
-    if player == 'A':
-        outcome, next_movable = judge(board, ar, ac)
-        if outcome == LOSE:
-            return (LOSE, cnt)
+def play(board, ar, ac, br, bc, cnt):
+    outcome, next_movable = judge(board, ar, ac)
+    if outcome == LOSE:
+        return (LOSE, cnt)
 
-        board[ar][ac] = 0
-        a_wins = []
-        a_loses = []
-        for nr, nc in next_movable:
-            b_outcome, b_cnt = play(board, 'B', nr, nc, br, bc, cnt + 1)
-            if b_outcome == WIN:
-                a_loses.append(b_cnt)
-            else:
-                a_wins.append(b_cnt)
-        board[ar][ac] = 1
-
-        if not a_wins:
-            return (LOSE, max(a_loses))
+    board[ar][ac] = 0
+    a_wins = []
+    a_loses = []
+    for nr, nc in next_movable:
+        b_outcome, b_cnt = play(board, br, bc, nr, nc, cnt + 1)
+        if b_outcome == WIN:
+            a_loses.append(b_cnt)
         else:
-            return (WIN, min(a_wins))
+            a_wins.append(b_cnt)
+    board[ar][ac] = 1
 
-    else: # player == 'B'
-        outcome, next_movable = judge(board, br, bc)
-        if outcome == LOSE:
-            return (LOSE, cnt)
-
-        board[br][bc] = 0
-        b_wins = []
-        b_loses = []
-        for nr, nc in next_movable:
-            a_outcome, a_cnt = play(board, 'A', ar, ac, nr, nc, cnt + 1)
-            if a_outcome == WIN:
-                b_loses.append(a_cnt)
-            else:
-                b_wins.append(a_cnt)
-        board[br][bc] = 1
-
-        if not b_wins:
-            return (LOSE, max(b_loses))
-        else:
-            return (WIN, min(b_wins))
+    if not a_wins:
+        return (LOSE, max(a_loses))
+    else:
+        return (WIN, min(a_wins))
