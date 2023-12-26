@@ -1,4 +1,6 @@
 /java
 /python/test.py
+/python/tmp.py
 .idea/
 python/.idea/
+/python/input
