@@ -1,39 +1,54 @@
-import heapq
+from collections import deque
+
+
+def bfs(cut, G, ss, bgn, ext):
+    vst = [0] * 50001
+    q = deque(ss)
+
+    last = float("inf")
+
+    while q:
+        now = q.popleft()
+        for cost, nxt in G[now]:
+            if cost > cut or vst[nxt] or bgn[nxt]:
+                continue
+            vst[nxt] = 1
+            if ext[nxt]:
+                last = min(last, nxt)
+                continue
+            q.append(nxt)
+
+    if last != float("inf"):
+        return last, True
+    return None, False
 
 
 def solution(n, paths, gates, summits):
-    gates, summits = set(gates), set(summits)
-    graph = [[] for _ in range(n + 1)]
-    for a, b, cost in paths:
-        if a in gates or b in summits:
-            graph[a].append((b, cost))
-        elif a in summits or b in gates:
-            graph[b].append((a, cost))
+    G = [[] for _ in range(50001)]
+
+    for p in paths:
+        G[p[0]].append((p[2], p[1]))
+        G[p[1]].append((p[2], p[0]))
+
+    ss = gates
+    bgn = [0] * 50001
+    ext = [0] * 50001
+
+    for s in gates:
+        bgn[s] = 1
+    for e in summits:
+        ext[e] = 1
+
+    l, r = 1, 10000000
+    top = None
+
+    while l <= r:
+        m = (l + r) // 2
+        result, found = bfs(m, G, ss, bgn, ext)
+        if found:
+            top = result
+            r = m - 1
         else:
-            graph[a].append((b, cost))
-            graph[b].append((a, cost))
+            l = m + 1
 
-    intensities = [float("inf")] * (n + 1)
-    q = []
-    for gate in gates:
-        intensities[gate] = 0
-        q.append((0, gate))
-
-    while q:
-        cur_inten, cur = heapq.heappop(q)
-        if cur_inten > intensities[cur]:
-            continue
-
-        for nxt, nxt_inten in graph[cur]:
-            nxt_inten = max(nxt_inten, cur_inten)
-            if nxt_inten < intensities[nxt]:
-                intensities[nxt] = nxt_inten
-                heapq.heappush(q, (nxt_inten, nxt))
-
-    ans_sum, ans_inten = None, float("inf")
-    for i, inten in enumerate(intensities):
-        if i in summits and inten < ans_inten:
-            ans_sum = i
-            ans_inten = inten
-
-    return ans_sum, ans_inten
+    return [top, l]
